@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {setActiveSort, toggleOrder} from "../redux/slices/filterSlice";
 
@@ -6,14 +6,27 @@ const Sort = ({pizzasOptions}) => {
     const [open, setOpen] = useState(false);
     const {activeSort, order} = useSelector((state) => state.filter)
     const dispatch = useDispatch()
+    const sortRef = useRef();
 
     const listItemClickHandler = (i) => {
         dispatch(setActiveSort(i))
         setOpen(!open)
     }
 
+    useEffect(() => {
+        function handleClick (e) {
+            if (!e.path.includes(sortRef.current)) {
+                setOpen(false)
+            }
+        }
+
+        document.addEventListener('click', handleClick)
+        return () => document.removeEventListener('click', handleClick)
+    }, []);
+
+
     return (
-        <div className="sort">
+        <div ref={sortRef} className="sort">
             <div className="sort__label">
                 <svg
                     className={order ? "" : "active"}

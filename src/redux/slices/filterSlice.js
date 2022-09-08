@@ -22,11 +22,20 @@ export const filterSlice = createSlice({
         },
         setCurrentPage: (state, action) => {
             state.currentPage = action.payload
+        },
+        setFilters: (state, action) => {
+            const keys = Object.keys(state)
+            const params = action.payload
+            keys.forEach(key => {
+                if (params.hasOwnProperty(key)) {
+                    state[key] = +params[key]
+                }
+            })
         }
     },
 })
 
-export const { setActiveCategory, setActiveSort, toggleOrder, setCurrentPage } = filterSlice.actions
+export const { setActiveCategory, setActiveSort, toggleOrder, setCurrentPage, setFilters } = filterSlice.actions
 
 export default filterSlice.reducer
 
