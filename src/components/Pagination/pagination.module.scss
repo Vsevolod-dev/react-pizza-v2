@@ -1,0 +1,40 @@
+.root {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+
+    :global {
+        li {
+            border: 1px solid #fe5f1e;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            padding-top: 9px;
+            top: 10px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 0.3s;
+
+            &:hover {
+                transition: 0.3s;
+                padding-top: 8px;
+                border: 2px solid #fe5f1e;
+                font-weight: 600;
+            }
+            &.selected {
+                transition: 0.3s;
+                border: 2px solid #fe5f1e;
+                padding-top: 8px;
+                font-weight: 600;
+                opacity: 1;
+            }
+        }
+        .previous, .next {
+            &:hover {
+                font-weight: 600;
+                cursor: pointer;
+            }
+        }
+    }
+}
