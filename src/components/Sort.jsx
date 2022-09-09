@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {setActiveSort, toggleOrder} from "../redux/slices/filterSlice";
+import {selectFilter, setActiveSort, toggleOrder} from "../redux/slices/filterSlice";
 
 const Sort = ({pizzasOptions}) => {
     const [open, setOpen] = useState(false);
-    const {activeSort, order} = useSelector((state) => state.filter)
+    const {activeSort, order} = useSelector(selectFilter)
     const dispatch = useDispatch()
     const sortRef = useRef();
 

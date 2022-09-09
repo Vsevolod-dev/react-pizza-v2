@@ -1,15 +1,16 @@
 import React, {useCallback, useContext, useRef, useState} from 'react';
 import debounce from 'lodash.debounce'
 import styles from './search.module.scss'
-import {SearchContext} from "../../App";
+import {useDispatch} from "react-redux";
+import {setSearchInput} from "../../redux/slices/filterSlice";
 
 const Search = () => {
     const [localSearchInput, setLocalSearchInput] = useState('');
-    const {setSearchInput} = useContext(SearchContext);
+    const dispatch = useDispatch()
     const inputRef = useRef();
 
     const svgClickHandler = () => {
-        setSearchInput('')
+        dispatch(setSearchInput(''))
         setLocalSearchInput('')
         inputRef.current.focus()
     }
@@ -17,8 +18,8 @@ const Search = () => {
     //todo Разобраться как это работает
     const updateSearchInput = useCallback(
         debounce((str) => {
-            setSearchInput(str)
-        }, 1000),
+            dispatch(setSearchInput(str))
+        }, 300),
         []
     )
 

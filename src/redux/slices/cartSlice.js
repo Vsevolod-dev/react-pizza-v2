@@ -23,8 +23,7 @@ export const cartSlice = createSlice({
             if (existedId !== -1) {
                 state.items[existedId].count++
             } else {
-                action.payload.count = 1
-                state.items.push(action.payload)
+                state.items.push({...action.payload, count: 1})
             }
 
             state.totalPrice += action.payload.price
@@ -41,7 +40,7 @@ export const cartSlice = createSlice({
                 return isequal(cpI, cpAP)
             })
 
-            if (existedId) {
+            if (existedId !== -1) {
                 if (state.items[existedId].count > 1) {
                     state.items[existedId].count--
                 }
@@ -56,10 +55,33 @@ export const cartSlice = createSlice({
             state.totalPrice = 0
             state.totalCount = 0
         },
+        removeGroup(state, action) {
+            const existingItems = JSON.parse(JSON.stringify(state.items))
+
+            const existedId = existingItems.findIndex(i => {
+                const cpI = i
+                const cpAP = action.payload
+                delete cpI.count
+                delete cpAP.count
+                return isequal(cpI, cpAP)
+            })
+
+            if (existedId !== -1) {
+                state.items = state.items.filter((item, index) => {
+                    if (index === existedId) {
+                        state.totalCount -= item.count
+                        state.totalPrice -= item.price * item.count
+                    }
+                    return index !== existedId
+                })
+            }
+        }
     },
 })
 
-export const { addItem, removeItem, clearItems } = cartSlice.actions
+export const selectCart = state => state.cart
+
+export const { addItem, removeItem, clearItems, removeGroup } = cartSlice.actions
 
 export default cartSlice.reducer
 

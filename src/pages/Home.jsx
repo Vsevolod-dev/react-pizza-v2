@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
 import Categories from "../components/Categories";
@@ -6,11 +6,10 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
 import PizzaBlockSkeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
-import {SearchContext} from "../App";
 import {useDispatch, useSelector} from "react-redux";
-import axios from "axios";
-import {setFilters} from "../redux/slices/filterSlice";
-import {logDOM} from "@testing-library/react";
+import {selectFilter, setFilters} from "../redux/slices/filterSlice";
+import {fetchPizzas, selectPizza} from "../redux/slices/pizzaSlice";
+import {selectCart} from "../redux/slices/cartSlice";
 
 const Home = () => {
     const navigate = useNavigate()
@@ -18,7 +17,7 @@ const Home = () => {
     const isSearchRef = useRef(false);
     const isMountedRef = useRef(false);
 
-    const {items} = useSelector(state => state.cart)
+    const {items} = useSelector(selectCart)
     let itemsCount = {}
     items.forEach(item => {
        if (itemsCount[item.id]) {
@@ -28,9 +27,8 @@ const Home = () => {
        }
     })
 
-    const {searchInput} = useContext(SearchContext);
-    const [pizzas, setPizzas] = useState([]);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const searchInput = useSelector(state => state.filter.searchInput)
+    const {items: pizzas, status: loadingStatus} = useSelector(selectPizza)
     const pizzasOptions = [
         { name: 'популярности', sortProp: 'rating' },
         { name: 'цене', sortProp: 'price' },
@@ -50,11 +48,9 @@ const Home = () => {
         activeSort,
         order,
         currentPage: page
-    } = useSelector((state) => state.filter)
+    } = useSelector(selectFilter)
 
-    function fetchPizzas() {
-        setIsLoaded(false)
-
+    async function getPizzas() {
         let params = []
         params.push(activeCategory ? `category=${activeCategory}` : "")
         params.push(`sortBy=${pizzasOptions[activeSort].sortProp}`)
@@ -63,14 +59,11 @@ const Home = () => {
         params.push(`page=${page + 1}`)
         params = params.join('&')
 
-        axios.get('https://62fd0d3fb9e38585cd4bd016.mockapi.io/pizzas?limit=4&' + params
-        )
-            .then(res => setPizzas(res.data))
-            .finally(() => setIsLoaded(true))
+        dispatch(fetchPizzas(params))
     }
 
     useEffect(() => {
-        if (!isSearchRef.current) fetchPizzas()
+        if (!isSearchRef.current) getPizzas()
         isSearchRef.current = false
     }, [activeCategory, activeSort, order, searchInput, page]);
 
@@ -108,9 +101,9 @@ const Home = () => {
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-                {isLoaded
-                    ? filteredPizzas
-                    : skeletons
+                {loadingStatus === 'loading'
+                    ? skeletons
+                    : filteredPizzas
                 }
             </div>
             <Pagination />

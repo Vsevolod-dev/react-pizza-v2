@@ -1,10 +1,12 @@
 import React from 'react';
 import logoSvg from '../assets/img/pizza-logo.svg'
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import Search from "./Search/Search";
 import CartButton from "./Cart/CartButton";
 
 const Header = () => {
+    const location = useLocation()
+
     return (
         <div className="header">
             <div className="container">
@@ -18,7 +20,7 @@ const Header = () => {
                     </div>
                 </Link>
                 <Search />
-                <CartButton />
+                {!location.pathname.includes('cart') && <CartButton/>}
             </div>
         </div>
     )
