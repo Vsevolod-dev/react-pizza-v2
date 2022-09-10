@@ -88,7 +88,7 @@ const Home = () => {
             for (let ic in itemsCount) {
                 if (pizza.id === +ic) count = itemsCount[ic]
             }
-            return <PizzaBlock key={pizza.id} {...pizza} count={count}/>
+            return <PizzaBlock {...pizza} count={count}/>
         })
 
     let skeletons = [...Array(6)].map((_, i) => <PizzaBlockSkeleton key={i}/>)

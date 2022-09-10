@@ -19,8 +19,10 @@ const Header = () => {
                         </div>
                     </div>
                 </Link>
-                <Search />
-                {!location.pathname.includes('cart') && <CartButton/>}
+                {!location.pathname.includes('cart') && <>
+                    <Search/>
+                    <CartButton/>
+                </>}
             </div>
         </div>
     )
