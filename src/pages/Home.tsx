@@ -11,7 +11,7 @@ import {selectFilter, setFilters} from "../redux/slices/filterSlice";
 import {fetchPizzas, selectPizza} from "../redux/slices/pizzaSlice";
 import {selectCart} from "../redux/slices/cartSlice";
 
-const Home = () => {
+const Home: React.FC = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const isSearchRef = useRef(false);

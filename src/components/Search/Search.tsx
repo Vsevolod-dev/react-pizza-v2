@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {ChangeEventHandler, useCallback, useRef, useState} from 'react';
 import debounce from 'lodash.debounce'
 import styles from './search.module.scss'
 import {useDispatch} from "react-redux";
@@ -23,7 +23,7 @@ const Search: React.FC = () => {
         []
     )
 
-    const inputChangeHandler = (e: any) => {
+    const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setLocalSearchInput(e.target.value)
         updateSearchInput(e.target.value)
     }

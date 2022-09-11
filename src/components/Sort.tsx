@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {selectFilter, setActiveSort, toggleOrder} from "../redux/slices/filterSlice";
+import React, {useEffect, useRef, useState} from 'react'
+import {useDispatch, useSelector} from "react-redux"
+import {selectFilter, setActiveSort, toggleOrder} from "../redux/slices/filterSlice"
 
 type pizzasOptionsType = {
     name: string,
@@ -11,11 +11,15 @@ type SortProps = {
     pizzasOptions: pizzasOptionsType[]
 }
 
+type PopupClick = MouseEvent & {
+    path: Node[]
+}
+
 const Sort: React.FC<SortProps> = ({pizzasOptions}) => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
     const {activeSort, order} = useSelector(selectFilter)
     const dispatch = useDispatch()
-    const sortRef = useRef<HTMLDivElement>(null);
+    const sortRef = useRef<HTMLDivElement>(null)
 
     const listItemClickHandler = (i: number) => {
         dispatch(setActiveSort(i))
@@ -23,15 +27,16 @@ const Sort: React.FC<SortProps> = ({pizzasOptions}) => {
     }
 
     useEffect(() => {
-        function handleClick (e: any) {
-            if (!e.path.includes(sortRef.current)) {
+        function handleClick (e: MouseEvent) {
+            const _e = e as PopupClick
+            if (sortRef.current && !_e.path.includes(sortRef.current)) {
                 setOpen(false)
             }
         }
 
         document.addEventListener('click', handleClick)
         return () => document.removeEventListener('click', handleClick)
-    }, []);
+    }, [])
 
 
     return (
@@ -68,7 +73,7 @@ const Sort: React.FC<SortProps> = ({pizzasOptions}) => {
                 </ul>
             </div>}
         </div>
-    );
-};
+    )
+}
 
-export default Sort;
+export default Sort
