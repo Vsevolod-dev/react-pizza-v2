@@ -1,18 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 
-const PizzaInfo = () => {
-    const [pizzaInfo, setPizzaInfo] = useState();
+const PizzaInfo: React.FC = () => {
+    const navigate = useNavigate()
+    const [pizzaInfo, setPizzaInfo] = useState<{
+        imageUrl: string
+        name: string
+        price: number
+    }>();
     const {id} = useParams()
 
-    async function getPizza (id) {
+    async function getPizza(id: string | undefined) {
         try {
             const res = await axios.get(`https://62fd0d3fb9e38585cd4bd016.mockapi.io/pizzas/${id}`)
             setPizzaInfo(res.data)
         } catch (e) {
+            alert('Произошла ошибка при загрузке пиццы или пицца не неайдена (')
             console.error(e)
-            setPizzaInfo('error')
+            navigate('/')
         }
     }
 
@@ -22,10 +28,6 @@ const PizzaInfo = () => {
 
     if (!pizzaInfo) {
         return <h2>Загрузка...</h2>
-    }
-
-    if (pizzaInfo === 'error') {
-        return <h2>Произошла ошибка, либо пицца не найдена</h2>
     }
 
     return (

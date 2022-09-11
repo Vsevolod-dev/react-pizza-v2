@@ -4,7 +4,7 @@ import {Link, useLocation} from "react-router-dom";
 import Search from "./Search/Search";
 import CartButton from "./Cart/CartButton";
 
-const Header = () => {
+const Header: React.FC = () => {
     const location = useLocation()
 
     return (

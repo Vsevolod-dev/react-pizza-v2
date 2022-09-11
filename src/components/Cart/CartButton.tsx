@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {selectCart} from "../../redux/slices/cartSlice";
 
-const CartButton = () => {
+const CartButton: React.FC = () => {
     const {totalPrice, totalCount} = useSelector(selectCart)
 
     return (

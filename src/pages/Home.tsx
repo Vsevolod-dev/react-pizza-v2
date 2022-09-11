@@ -18,15 +18,19 @@ const Home = () => {
     const isMountedRef = useRef(false);
 
     const {items} = useSelector(selectCart)
-    let itemsCount = {}
-    items.forEach(item => {
-       if (itemsCount[item.id]) {
-           itemsCount[item.id] += item.count
+    let itemsCount: object = {}
+    items.forEach((item: any) => {
+       // @ts-ignore
+        if (itemsCount[item.id]) {
+           // @ts-ignore
+            itemsCount[item.id] += item.count
        } else {
-           itemsCount[item.id] = item.count
+           // @ts-ignore
+            itemsCount[item.id] = item.count
        }
     })
 
+    // @ts-ignore
     const searchInput = useSelector(state => state.filter.searchInput)
     const {items: pizzas, status: loadingStatus} = useSelector(selectPizza)
     const pizzasOptions = [
@@ -57,9 +61,10 @@ const Home = () => {
         params.push(`order=${order ? "asc" : "desc"}`)
         searchInput && params.push(`search=${searchInput}`)
         params.push(`page=${page + 1}`)
-        params = params.join('&')
+        const paramsStr: string = params.join('&')
 
-        dispatch(fetchPizzas(params))
+        // @ts-ignore
+        dispatch(fetchPizzas(paramsStr))
     }
 
     useEffect(() => {
@@ -83,12 +88,14 @@ const Home = () => {
 
     let filteredPizzas = pizzas
         // .filter(pizza => pizza.name.toLowerCase().includes(searchInput.toLowerCase()))
-        .map((pizza) => {
+        .map((pizza: any) => {
             let count = 0
             for (let ic in itemsCount) {
-                if (pizza.id === +ic) count = itemsCount[ic]
+                if (+pizza.id === +ic) { // @ts-ignore
+                    count = itemsCount[ic]
+                }
             }
-            return <PizzaBlock {...pizza} count={count}/>
+            return <PizzaBlock key={pizza.id} {...pizza} count={count}/>
         })
 
     let skeletons = [...Array(6)].map((_, i) => <PizzaBlockSkeleton key={i}/>)

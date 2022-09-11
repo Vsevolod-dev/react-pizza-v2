@@ -2,19 +2,28 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {selectFilter, setActiveSort, toggleOrder} from "../redux/slices/filterSlice";
 
-const Sort = ({pizzasOptions}) => {
+type pizzasOptionsType = {
+    name: string,
+    sortProp: string
+}
+
+type SortProps = {
+    pizzasOptions: pizzasOptionsType[]
+}
+
+const Sort: React.FC<SortProps> = ({pizzasOptions}) => {
     const [open, setOpen] = useState(false);
     const {activeSort, order} = useSelector(selectFilter)
     const dispatch = useDispatch()
-    const sortRef = useRef();
+    const sortRef = useRef<HTMLDivElement>(null);
 
-    const listItemClickHandler = (i) => {
+    const listItemClickHandler = (i: number) => {
         dispatch(setActiveSort(i))
         setOpen(!open)
     }
 
     useEffect(() => {
-        function handleClick (e) {
+        function handleClick (e: any) {
             if (!e.path.includes(sortRef.current)) {
                 setOpen(false)
             }
@@ -47,7 +56,7 @@ const Sort = ({pizzasOptions}) => {
             </div>
             {open && <div className="sort__popup">
                 <ul>
-                    {pizzasOptions.map((option, i) =>
+                    {pizzasOptions.map((option, i: number) =>
                         <li
                             className={activeSort === i ? "active" : ""}
                             key={i}

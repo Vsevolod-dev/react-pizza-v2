@@ -5,7 +5,7 @@ import {clearItems, selectCart} from "../redux/slices/cartSlice";
 import CartBlock from "../components/Cart/CartBlock/CartBlock";
 import emptyCart from '../../src/assets/img/empty-cart.png'
 
-const Cart = () => {
+const Cart: React.FC = () => {
     const {items, totalPrice, totalCount} = useSelector(selectCart)
     const dispatch = useDispatch()
 
@@ -52,7 +52,7 @@ const Cart = () => {
                     </div>
                     <div className="content__items">
                         {
-                            items.map((pizza, index) => <CartBlock key={index} {...pizza} />)
+                            items.map((pizza: PizzaProps, index: number) => <CartBlock key={index} {...pizza} />)
                         }
                     </div>
                     <div className="cart__bottom">
@@ -77,7 +77,7 @@ const Cart = () => {
                     </div>
                 </div>
                 : <div className="cart cart--empty">
-                    <h2>Корзина пустая <icon>😕</icon></h2>
+                    <h2>Корзина пустая <span>😕</span></h2>
                     <p>
                         Вероятней всего, вы не заказывали ещё пиццу.<br/>
                         Для того, чтобы заказать пиццу, перейди на главную страницу.

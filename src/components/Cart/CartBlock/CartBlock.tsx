@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch} from "react-redux";
 import {addItem, removeGroup, removeItem} from "../../../redux/slices/cartSlice";
 
-const CartBlock = ({id, imageUrl, name, type, size, price, count}) => {
+const CartBlock: React.FC<PizzaProps> = ({id, imageUrl, name, type, size, price, count}) => {
     const dispatch = useDispatch()
 
     const minusItemHandler = () => {
