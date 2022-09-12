@@ -6,32 +6,31 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
 import PizzaBlockSkeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {selectFilter, setFilters} from "../redux/slices/filterSlice";
 import {fetchPizzas, selectPizza} from "../redux/slices/pizzaSlice";
 import {selectCart} from "../redux/slices/cartSlice";
+import {RootState, useAppDispatch} from "../redux/store";
 
 const Home: React.FC = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const isSearchRef = useRef(false);
     const isMountedRef = useRef(false);
 
     const {items} = useSelector(selectCart)
-    let itemsCount: object = {}
+    let itemsCount: { [index: string]: any } = {}
     items.forEach((item: any) => {
-       // @ts-ignore
         if (itemsCount[item.id]) {
-           // @ts-ignore
             itemsCount[item.id] += item.count
        } else {
-           // @ts-ignore
+
             itemsCount[item.id] = item.count
        }
     })
 
-    // @ts-ignore
-    const searchInput = useSelector(state => state.filter.searchInput)
+
+    const searchInput = useSelector((state: RootState) => state.filter.searchInput)
     const {items: pizzas, status: loadingStatus} = useSelector(selectPizza)
     const pizzasOptions = [
         { name: 'популярности', sortProp: 'rating' },
@@ -60,10 +59,9 @@ const Home: React.FC = () => {
         params.push(`sortBy=${pizzasOptions[activeSort].sortProp}`)
         params.push(`order=${order ? "asc" : "desc"}`)
         searchInput && params.push(`search=${searchInput}`)
-        params.push(`page=${page + 1}`)
+        if (!searchInput) params.push(`page=${page + 1}`)
         const paramsStr: string = params.join('&')
 
-        // @ts-ignore
         dispatch(fetchPizzas(paramsStr))
     }
 
@@ -91,7 +89,7 @@ const Home: React.FC = () => {
         .map((pizza: any) => {
             let count = 0
             for (let ic in itemsCount) {
-                if (+pizza.id === +ic) { // @ts-ignore
+                if (+pizza.id === +ic) {
                     count = itemsCount[ic]
                 }
             }

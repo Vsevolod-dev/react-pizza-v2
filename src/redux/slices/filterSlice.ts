@@ -1,6 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
+import {RootState} from "../store";
 
-const initialState = {
+interface FilterSliceState {
+    category: number
+    currentPage: number
+    activeSort: number
+    order: number | boolean
+    searchInput: string
+}
+
+const initialState: FilterSliceState = {
     category: 0,
     currentPage: 0,
     activeSort: 0,
@@ -27,11 +36,12 @@ export const filterSlice = createSlice({
         setSearchInput: (state, action) => {
             state.searchInput = action.payload
         },
-        setFilters: (state, action) => {
-            const keys = Object.keys(state)
+        setFilters: (state: FilterSliceState, action) => {
+            const keys: string[] = Object.keys(state)
             const params = action.payload
-            keys.forEach(key => {
+            keys.forEach((key: string) => {
                 if (params.hasOwnProperty(key)) {
+                    // @ts-ignore
                     state[key] = +params[key]
                 }
             })
@@ -39,9 +49,9 @@ export const filterSlice = createSlice({
     },
 })
 
-export const selectFilter = state => state.filter
-export const selectFilterCategory = state => state.filter.category
-export const selectFilterSearchInput = state => state.filter.searchInput
+export const selectFilter = (state: RootState )=> state.filter
+export const selectFilterCategory = (state: RootState )=> state.filter.category
+export const selectFilterSearchInput = (state: RootState )=> state.filter.searchInput
 
 export const { setActiveCategory, setActiveSort, toggleOrder, setCurrentPage, setFilters, setSearchInput } = filterSlice.actions
 
